@@ -1,9 +1,11 @@
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const authRoutes = require("./routes/auth.routes.js");
+const router = require("./routes/auth.routes.js");
 const cors = require("cors");
 
 const app = express();
+app.use(express.json());
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -12,9 +14,6 @@ app.use(
   }),
 );
 
-app.use(express.json());
-app.use(cookieParser());
-
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", router);
 
 module.exports = app;

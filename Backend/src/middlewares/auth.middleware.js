@@ -24,9 +24,6 @@ async function authUser(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    console.log(decoded);
     return res.status(401).json({
       message: "Invalid Token",
     });

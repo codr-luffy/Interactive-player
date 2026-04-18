@@ -24,6 +24,7 @@ export const useAuth = () => {
   async function handleGetMe() {
     setLoding(true);
     const data = await getMe();
+    console.log(data);
     setUser(data.user);
     setLoding(false);
   }
