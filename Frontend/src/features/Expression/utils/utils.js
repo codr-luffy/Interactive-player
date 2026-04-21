@@ -39,13 +39,14 @@ export const detect = ({ landmarkerRef, videoRef, setExpression }) => {
     const frownRight = getScore("mouthFrownRight");
     let currentExpression = "Neutral";
     if (smileLeft > 0.5 && smileRight > 0.5) {
-      currentExpression = "Happy 😄";
-    } else if (jawOpen > 0.6 && browUp > 0.5) {
-      currentExpression = "Surprised 😲";
-    } else if (frownLeft > 0.5 && frownRight > 0.5) {
-      currentExpression = "Sad 😢";
+      currentExpression = "happy";
+    } else if (jawOpen > 0.2 && browUp > 0.2) {
+      currentExpression = "surprised";
+    } else if (frownLeft > 0.0001 && frownRight > 0.0001) {
+      currentExpression = "sad";
     }
     setExpression(currentExpression);
+    return currentExpression;
   }
   // animationRef.current = requestAnimationFrame(detect);
 };
