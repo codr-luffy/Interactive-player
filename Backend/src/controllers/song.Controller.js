@@ -35,13 +35,18 @@ async function createSong(req, res) {
 }
 
 async function getSong(req, res) {
-  const { mood } = req.query;
-  const song = await songModel.findOne({ mood });
+  try {
+    const { mood } = req.query;
+    const song = await songModel.random(mood);
 
-  res.status(200).json({
-    message: "song fetched successfully",
-    song,
-  });
+    res.status(200).json({
+      message: "song fetched successfully",
+      song,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+    console.log(error);
+  }
 }
 
 module.exports = { createSong, getSong };
