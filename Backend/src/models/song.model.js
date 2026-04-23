@@ -22,19 +22,31 @@ const songSchema = new mongoose.Schema({
   },
 });
 
-songSchema.statics.random = async function (mood = null) {
-  try {
-    // Use $sample to randomly select 1 document
-    const matchStage = mood ? { $match: { mood } } : { $match: {} };
-    const result = await this.aggregate([
-      matchStage,
-      { $sample: { size: 1 } }, // size: 1 = return 1 random document
-    ]);
+// songSchema.statics.random = async function (mood = null) {
+//   try {
+//     // Use $sample to randomly select 1 document
+//     const matchStage = mood ? { $match: { mood } } : { $match: {} };
+//     const result = await this.aggregate([
+//       matchStage,
+//       { $sample: { size: 1 } }, // size: 1 = return 1 random document
+//     ]);
+//
+//     // $sample returns an array; extract the first (and only) element
+//     return result.length > 0 ? result[0] : null;
+//   } catch (error) {
+//     throw new Error(`Error fetching random document: ${error.message}`);
+//   }
+// };
 
-    // $sample returns an array; extract the first (and only) element
-    return result.length > 0 ? result[0] : null;
+songSchema.statics.getByMood = async function (mood = null) {
+  try {
+    const matchStage = mood ? { $match: { mood } } : { $match: {} };
+
+    const result = await this.aggregate([matchStage]); // ✅ sarey songs
+
+    return result;
   } catch (error) {
-    throw new Error(`Error fetching random document: ${error.message}`);
+    throw new Error(`Error fetching songs: ${error.message}`);
   }
 };
 

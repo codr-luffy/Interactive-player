@@ -1,46 +1,65 @@
-import { useEffect, useRef, useState } from "react";
-import { detect, init } from "../utils/utils.js";
+import { useRef, useState } from "react";
+import { detectLoop, init, stopStream } from "../utils/utils.js";
+import "../../shared/style/button.scss";
 
 export default function FaceExpression({ onClick = () => {} }) {
   const videoRef = useRef(null);
   const landmarkerRef = useRef(null);
   const streamRef = useRef(null);
+  const animationRef = useRef(null);
 
-  const [expression, setExpression] = useState("Detecting...");
+  const [expression, setExpression] = useState(null); // null = idle
+  const [detecting, setDetecting] = useState(false);
 
-  useEffect(() => {
-    init({ landmarkerRef, videoRef, streamRef });
-    return () => {
-      if (landmarkerRef.current) {
-        landmarkerRef.current.close();
-      }
-      if (videoRef.current?.srcObject) {
-        videoRef.current.srcObject.getTracks().forEach((track) => track.stop());
-      }
-    };
-  }, []);
+  async function handleDetect() {
+    setExpression(null);
+    setDetecting(true);
 
-  async function handleClick() {
-    const expression = detect({ landmarkerRef, videoRef, setExpression });
-    console.log(expression);
-    onClick(expression);
+    await init({ landmarkerRef, videoRef, streamRef });
+
+    detectLoop({
+      landmarkerRef,
+      videoRef,
+      animationRef,
+      onDetected: (expr) => {
+        // ✅ Cancel animation loop
+        cancelAnimationFrame(animationRef.current);
+
+        // ✅ Stop camera
+        stopStream({ landmarkerRef, videoRef, streamRef });
+
+        // ✅ Update UI
+        setExpression(expr);
+        setDetecting(false);
+
+        // ✅ Bubble up
+        onClick(expr);
+      },
+    });
   }
 
   return (
     <div style={{ textAlign: "center" }}>
+      {/* Video only shown while detecting */}
       <video
         ref={videoRef}
-        style={{ width: "400px", borderRadius: "12px" }}
+        style={{
+          width: "320px",
+          borderRadius: "12px",
+          display: detecting ? "block" : "none",
+        }}
         playsInline
       />
-      <h2>{expression}</h2>
-      <button
-        onClick={() => {
-          handleClick();
-        }}
-      >
-        Detect Expression
-      </button>
+
+      {expression && <h2>😊 Detected: {expression}</h2>}
+      {detecting && <h2>🔍 Detecting...</h2>}
+
+      {/* Hide button while detecting */}
+      {!detecting && (
+        <button className="button" onClick={handleDetect}>
+          {expression ? "Detect Again" : "Detect Expression"}
+        </button>
+      )}
     </div>
   );
 }

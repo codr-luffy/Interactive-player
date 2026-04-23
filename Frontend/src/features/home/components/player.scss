@@ -280,6 +280,82 @@
   }
 }
 
+.player-container {
+  position: fixed;
+  top: 18rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: #1a1a1a;
+  // border-top: 1px solid #333;
+  padding: 8px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 650px;
+  gap: 24px;
+  z-index: 100;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.5);
+
+  h3 {
+    border-bottom: 1px solid #333;
+    padding-bottom: 6px;
+  }
+
+  .player__playlist {
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    align-items: flex-start;
+    justify-content: center;
+
+    .playlist__itemactive {
+      padding: 6px 1px;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: center;
+      background: #dd4200;
+      color: #fff;
+      transition:
+        background 0.12s,
+        color 0.12s;
+    }
+    .playlist__item {
+      padding: 6px 1px;
+      display: flex;
+      flex-direction: row;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 300;
+      text-align: center;
+      transition:
+        background 0.12s,
+        color 0.12s;
+    }
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+    span {
+      text-align: center;
+      font-size: 0.8rem;
+      padding: 8px 8px;
+      color: #bbb;
+    }
+  }
+}
+
 /* Responsive: stack on smaller screens */
 @media (max-width: 640px) {
   .player {

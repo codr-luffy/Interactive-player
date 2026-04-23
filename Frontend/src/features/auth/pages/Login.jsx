@@ -5,8 +5,7 @@ import FormGroup from "../components/FormGroup.jsx";
 import "../style/login.scss";
 
 const Login = () => {
-  const { loading, handleLogin } = useAuth();
-
+  const { handleLogin } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
